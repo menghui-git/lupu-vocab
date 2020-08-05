@@ -1,26 +1,23 @@
-chrome.runtime.onInstalled.addListener(() =>
-  chrome.contextMenus.create({"id": "noteMaker", "title": "Look Up '%s'", "contexts": ["all"]})
-)
-
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  var selection = info.selectionText;
-  lookUpDictionary(selection);
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.contextMenus.create({"id": "lookUp", "title": "Look Up '%s'", "contexts": ["all"]})
+    chrome.contextMenus.create({"id": "saveWord", "title": "Save '%s'", "contexts": ["all"]})
 })
 
-function lookUpDictionary(word) {
-    const url = "https://dictionary.cambridge.org/dictionary/english/" + word;
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+    var selection = info.selectionText;
 
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'document';
-
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-            // TODO: handle not result
-            desc = xhr.response.querySelector('meta[name="description"]').content;
-            alert(desc);
-            return desc;
-        }
+    if (info.menuItemId === "lookUp") {
+        openNewDictionaryTab(selection);
+    } else if (info.menuItemId === "saveWord") {
+        openWordSavingTab(selection);
     }
-    xhr.open('GET', url, true);
-    xhr.send();
+})
+
+function openDictionaryTab(word) {
+    var url = "https://dictionary.cambridge.org/dictionary/english/" + word;
+    chrome.tabs.create({'url': url}, (tab) => {});
+}
+
+function openWordSavingTab(word) {
+    chrome.tabs.create({url: chrome.extension.getURL('popup.html?w=' + word)}, (tab) => {});
 }
