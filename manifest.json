@@ -1,0 +1,22 @@
+{
+  "name": "Look Up & Pick Up Vocabulary",
+  "version": "1.0",
+  "description": "Learn and apply new vocabulary efficiently!",
+  "manifest_version": 2,
+  "icons": {
+  },
+  "permissions": ["contextMenus"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
