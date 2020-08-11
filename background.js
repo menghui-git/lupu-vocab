@@ -1,6 +1,11 @@
+const api_enabled = false;
+const api_host = 'http://localhost';  // call Workbook API (https://github.com/menghui-git/Workbook)
+
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({"id": "lookUp", "title": "Look Up '%s'", "contexts": ["all"]})
-    chrome.contextMenus.create({"id": "saveWord", "title": "Save '%s'", "contexts": ["all"]})
+    if (api_enabled) {
+        chrome.contextMenus.create({"id": "saveWord", "title": "Save '%s'", "contexts": ["all"]})
+    }
 })
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -14,10 +19,11 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 })
 
 function openDictionaryTab(word) {
-    var url = "https://dictionary.cambridge.org/dictionary/english/" + word;
+    let url = "https://dictionary.cambridge.org/dictionary/english/" + word;
     chrome.tabs.create({'url': url}, (tab) => {});
 }
 
 function openWordSavingTab(word) {
-    chrome.tabs.create({url: chrome.extension.getURL('popup.html?w=' + word)}, (tab) => {});
+    let url = api_host + '?w=' + word;
+    chrome.tabs.create({'url': url}, (tab) => {});
 }
