@@ -7,7 +7,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     var selection = info.selectionText;
 
     if (info.menuItemId === "lookUp") {
-        openNewDictionaryTab(selection);
+        openDictionaryTab(selection);
     } else if (info.menuItemId === "saveWord") {
         openWordSavingTab(selection);
     }
